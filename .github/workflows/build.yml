@@ -1,0 +1,35 @@
+name: Build Fastfetch for OpenWRT
+
+on:
+  push:
+    branches:
+      - openwrt-fastfetch
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout OpenWRT Repo
+        uses: actions/checkout@v2
+        with:
+          repository: openwrt/openwrt
+          path: openwrt
+
+      - name: Checkout Fastfetch Package
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libncurses5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc libxml-parser-perl
+      
+      - name: Build Fastfetch Package
+        run: |
+          cd openwrt
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+          make package/fastfetch/compile V=s
