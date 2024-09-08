@@ -1,12 +1,14 @@
 name: Build Fastfetch for OpenWRT
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - openwrt-fastfetch
   pull_request:
     branches:
       - master
+      - openwrt-fastfetch
 
 jobs:
   build:
